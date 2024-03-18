@@ -60,5 +60,43 @@ def limpar_pacientes():
     conn.close()
     return redirect(url_for('index'))
 
+@app.route('/agendar_consulta')
+def agendar_consulta():
+    if request.method == 'POST':
+        nome = request.form['nome']
+        cpf = request.form['cpf']
+        data = request.form['data']
+        consulta = request.form['consulta']
+
+        conn = sqlite3.connect('gestao_hospitalar.db')
+        cursor = conn.cursor()
+        cursor.execute('''
+            INSERT INTO pacientes (nome, cpf, data, consulta)
+            VALUES (?, ?, ?, ?)
+''', (nome, cpf, data, consulta))
+        conn.commit()
+        conn.close()
+        return redirect(url_for('index'))
+    return render_template('consulta.html')
+
+@app.route('/ver_consultas')
+def agendar_consulta():
+    if request.method == 'POST':
+        nome = request.form['nome']
+        cpf = request.form['cpf']
+        data = request.form['data']
+        consulta = request.form['consulta']
+
+        conn = sqlite3.connect('gestao_hospitalar.db')
+        cursor = conn.cursor()
+        cursor.execute('''
+            INSERT INTO pacientes (nome, cpf, data, consulta)
+            VALUES (?, ?, ?, ?)
+''', (nome, cpf, data, consulta))
+        conn.commit()
+        conn.close()
+        return redirect(url_for('index'))
+    return render_template('visconsultas.html')
+
 if __name__ == '__main__':
     app.run(debug=True)
