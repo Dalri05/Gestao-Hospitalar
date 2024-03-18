@@ -1,0 +1,36 @@
+.container {
+    width: 60%;
+    margin: 50px auto;
+    padding: 30px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+.submit-btn {
+    width: 50%;
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: #fff;
+    text-align: center;
+    text-decoration: none;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.5s;
+}
+
+.submit-btn:hover {
+    background-color: #45a049; 
+}
+
+.submit-btn:active {
+    background-color: #357a38; 
+}
+
