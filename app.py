@@ -1,33 +1,24 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
-import sqlite3
+import mysql.connector
 
 app = Flask(__name__)
 
-conn = sqlite3.connect('gestao_hospitalar.db')
-cursor = conn.cursor()
-
-cursor.execute('''
-    CREATE TABLE IF NOT EXISTS pacientes (
-               id INTEGER PRIMARY KEY AUTOINCREMENT,
-               nome TEXT NOT NULL,
-               idade INTEGER,
-               sexo TEXT,
-               cpf TEXT UNIQUE,
-               endereco TEXT,
-               telefone TEXT
+try:
+    conexao = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="12345",
+        database="gestaohospitalar"
     )
-''')
-
-conn.commit()
-conn.close()
+    cursor = conexao.cursor()
+except mysql.connector.Error as err:
+    print("Erro de conexão com o banco de dados:", err)
+    exit(1)
 
 @app.route('/')
 def index():
-    conn = sqlite3.connect('gestao_hospitalar.db')
-    cursor = conn.cursor()
     cursor.execute('SELECT * FROM pacientes')
     pacientes = cursor.fetchall()
-    conn.close()
     return render_template('index.html', pacientes=pacientes)
 
 @app.route('/novo_paciente', methods=['GET', 'POST'])
@@ -40,27 +31,21 @@ def novo_paciente():
         endereco = request.form['endereco']
         telefone = request.form['telefone']
 
-        conn = sqlite3.connect('gestao_hospitalar.db')
-        cursor = conn.cursor()
         cursor.execute('''
             INSERT INTO pacientes (nome, idade, sexo, cpf, endereco, telefone)
-            VALUES (?, ?, ?, ?, ?, ?)
+            VALUES (%s, %s, %s, %s, %s, %s)
 ''', (nome, idade, sexo, cpf, endereco, telefone))
-        conn.commit()
-        conn.close()
+        conexao.commit()
         return redirect(url_for('index'))
     return render_template('novo_paciente.html')
 
 @app.route('/limpar_pacientes')
 def limpar_pacientes():
-    conn = sqlite3.connect('gestao_hospitalar.db')
-    cursor = conn.cursor()
     cursor.execute('DELETE FROM pacientes')
-    conn.commit()
-    conn.close()
+    conexao.commit()
     return redirect(url_for('index'))
 
-@app.route('/agendar_consulta')
+@app.route('/agendar_consulta', methods=['GET', 'POST'])
 def agendar_consulta():
     if request.method == 'POST':
         nome = request.form['nome']
@@ -68,35 +53,19 @@ def agendar_consulta():
         data = request.form['data']
         consulta = request.form['consulta']
 
-        conn = sqlite3.connect('gestao_hospitalar.db')
-        cursor = conn.cursor()
         cursor.execute('''
-            INSERT INTO pacientes (nome, cpf, data, consulta)
-            VALUES (?, ?, ?, ?)
+            INSERT INTO consultas (nome, cpf, data, consulta)
+            VALUES (%s, %s, %s, %s)
 ''', (nome, cpf, data, consulta))
-        conn.commit()
-        conn.close()
+        conexao.commit()
         return redirect(url_for('index'))
     return render_template('consulta.html')
 
 @app.route('/ver_consultas')
-def agendar_consulta():
-    if request.method == 'POST':
-        nome = request.form['nome']
-        cpf = request.form['cpf']
-        data = request.form['data']
-        consulta = request.form['consulta']
-
-        conn = sqlite3.connect('gestao_hospitalar.db')
-        cursor = conn.cursor()
-        cursor.execute('''
-            INSERT INTO pacientes (nome, cpf, data, consulta)
-            VALUES (?, ?, ?, ?)
-''', (nome, cpf, data, consulta))
-        conn.commit()
-        conn.close()
-        return redirect(url_for('index'))
-    return render_template('visconsultas.html')
+def ver_consultas():
+    cursor.execute('SELECT * FROM consultas')
+    consultas = cursor.fetchall()
+    return render_template('visconsultas.html', consultas=consultas)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=8000)
