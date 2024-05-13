@@ -15,7 +15,7 @@ except mysql.connector.Error as err:
     print("Erro de conexão com o banco de dados:", err)
     exit(1)
 
-@app.route('/')
+@app.route('/inicio')
 def index():
     cursor.execute('SELECT * FROM pacientes')
     pacientes = cursor.fetchall()
@@ -36,14 +36,32 @@ def novo_paciente():
             VALUES (%s, %s, %s, %s, %s, %s)
 ''', (nome, idade, sexo, cpf, endereco, telefone))
         conexao.commit()
-        return redirect(url_for('index'))
+        return redirect(url_for('inicial'))
     return render_template('novo_paciente.html')
+
+@app.route('/', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        usuario = request.form['usuario']
+        senha = request.form['senha']
+        return redirect(url_for('inicial'))
+
+    # Se o método for GET, retorne o template de login
+    return render_template('login.html')
+
+@app.route('/cadastro', methods=['GET', 'POST'])
+def cadastro():
+    if request.method == 'GET':
+        print()
+        return redirect(url_for('inicial'))
+    return render_template('cadastro.html')
+
 
 @app.route('/limpar_pacientes')
 def limpar_pacientes():
     cursor.execute('DELETE FROM pacientes')
     conexao.commit()
-    return redirect(url_for('index'))
+    return redirect(url_for('inicial'))
 
 @app.route('/agendar_consulta', methods=['GET', 'POST'])
 def agendar_consulta():
@@ -58,7 +76,7 @@ def agendar_consulta():
             VALUES (%s, %s, %s, %s)
 ''', (nome, cpf, data, consulta))
         conexao.commit()
-        return redirect(url_for('index'))
+        return redirect(url_for('inicial'))
     return render_template('consulta.html')
 
 @app.route('/ver_consultas')

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pacientes</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+</head>
+
+<body>
+    <div class="login-container">
+        <h2>Login</h2>
+        <form id="login-form" action="{{ url_for('index') }}" method="get">
+            <div class="input-group">
+                <label for="usuario">Usuário:</label>
+                <input type="text" id="usuario" name="usuario">
+            </div>
+            <div class="input-group">
+                <label for="senha">Senha:</label>
+                <input type="password" id="senha" name="senha">
+            </div>
+            <button type="submit">Login</button>
+            <p class="pergunta">Não possui conta?</p>
+            <button id="cadastro-btn" type="button">Cadastre-se</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('cadastro-btn').addEventListener('click', function() {
+            var form = document.getElementById('login-form');
+            var usernameInput = document.getElementById('usuario');
+            var passwordInput = document.getElementById('senha');
+
+            usernameInput.setAttribute('required', 'required');
+            passwordInput.setAttribute('required', 'required');
+
+            form.setAttribute('action', '{{ url_for("cadastro") }}');
+        });
+    </script>
+</body>
+
+</html>
