@@ -21,6 +21,12 @@ def index():
     pacientes = cursor.fetchall()
     return render_template('index.html', pacientes=pacientes)
 
+@app.route('/cadastro')
+def cadastro():
+    return render_template('cadastro.html')
+
+
+
 @app.route('/novo_paciente', methods=['GET', 'POST'])
 def novo_paciente():
     if request.method == 'POST':
@@ -44,17 +50,7 @@ def login():
         usuario = request.form['usuario']
         senha = request.form['senha']
         return redirect(url_for('index'))
-
-    # Se o método for GET, retorne o template de login
     return render_template('login.html')
-
-@app.route('/cadastro', methods=['GET', 'POST'])
-def cadastro():
-    if request.method == 'GET':
-        print()
-        return redirect(url_for('index'))
-    return render_template('cadastro.html')
-
 
 @app.route('/limpar_pacientes')
 def limpar_pacientes():
