@@ -28,15 +28,14 @@ def novo_paciente():
         idade = request.form['idade']
         sexo = request.form['sexo']
         cpf = request.form['cpf']
-        endereco = request.form['endereco']
+        cep = request.form['cep']
         telefone = request.form['telefone']
 
         cursor.execute('''
-            INSERT INTO pacientes (nome, idade, sexo, cpf, endereco, telefone)
-            VALUES (%s, %s, %s, %s, %s, %s)
-''', (nome, idade, sexo, cpf, endereco, telefone))
+            INSERT INTO pacientes (nome, idade, sexo, cpf, cep, telefone)
+            VALUES (%s, %s, %s, %s, %s, %s)''', (nome, idade, sexo, cpf, cep, telefone))
         conexao.commit()
-        return redirect(url_for('inicial'))
+        return redirect(url_for('index'))
     return render_template('novo_paciente.html')
 
 @app.route('/', methods=['GET', 'POST'])
@@ -44,7 +43,7 @@ def login():
     if request.method == 'POST':
         usuario = request.form['usuario']
         senha = request.form['senha']
-        return redirect(url_for('inicial'))
+        return redirect(url_for('index'))
 
     # Se o método for GET, retorne o template de login
     return render_template('login.html')
@@ -53,7 +52,7 @@ def login():
 def cadastro():
     if request.method == 'GET':
         print()
-        return redirect(url_for('inicial'))
+        return redirect(url_for('index'))
     return render_template('cadastro.html')
 
 
@@ -61,7 +60,7 @@ def cadastro():
 def limpar_pacientes():
     cursor.execute('DELETE FROM pacientes')
     conexao.commit()
-    return redirect(url_for('inicial'))
+    return redirect(url_for('index'))
 
 @app.route('/agendar_consulta', methods=['GET', 'POST'])
 def agendar_consulta():
@@ -76,7 +75,7 @@ def agendar_consulta():
             VALUES (%s, %s, %s, %s)
 ''', (nome, cpf, data, consulta))
         conexao.commit()
-        return redirect(url_for('inicial'))
+        return redirect(url_for('index'))
     return render_template('consulta.html')
 
 @app.route('/ver_consultas')
