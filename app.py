@@ -21,8 +21,21 @@ def index():
     pacientes = cursor.fetchall()
     return render_template('index.html', pacientes=pacientes)
 
-@app.route('/cadastro')
+@app.route('/cadastro', methods=['GET', 'POST'])
 def cadastro():
+    if request.method == "POST":
+        usuario = request.form['username']
+        senha = request.form['password']
+        nome = request.form['nome']
+        email = request.form['email']
+        cpf = request.form['cpf']
+
+        cursor.execute('''
+            INSERT INTO usuarios (usuario, senha, nome, cpf, email)
+            VALUES (%s, %s, %s, %s, %s)''', (usuario, senha, nome, cpf, email))
+        conexao.commit()
+        return redirect(url_for('login'))
+    
     return render_template('cadastro.html')
 
 
