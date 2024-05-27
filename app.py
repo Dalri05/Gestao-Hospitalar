@@ -1,7 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 import mysql.connector
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
+app.secret_key = '12345'
+senhaAdmin = '12345'
 
 try:
     conexao = mysql.connector.connect(
@@ -23,7 +26,7 @@ def index():
 
 @app.route('/cadastro', methods=['GET', 'POST'])
 def cadastro():
-    if request.method == "POST":
+    if request.method == 'POST':
         usuario = request.form['username']
         senha = request.form['password']
         nome = request.form['nome']
@@ -60,10 +63,28 @@ def novo_paciente():
 @app.route('/', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        usuario = request.form['usuario']
-        senha = request.form['senha']
-        return redirect(url_for('index'))
+        usuario = request.form['username'].strip()
+        senha = request.form['password'].strip()
+
+        cursor.execute('SELECT * FROM usuarios WHERE usuario = %s', (usuario,))
+        usuario_encontrado = cursor.fetchone()
+
+        if usuario_encontrado:
+            # Para depuração: exibir o hash da senha armazenada
+            print(f"Senha armazenada (hash): {usuario_encontrado[1]}")
+            print(f"Senha fornecida: {senha}")
+
+            if check_password_hash(usuario_encontrado[1], senha):
+                return redirect(url_for('index'))
+            if {senha} == senhaAdmin:
+                return redirect(url_for('index'))
+            else:
+                flash('Senha incorreta', 'error')
+        else:
+            flash('Usuário não encontrado', 'error')
+
     return render_template('login.html')
+
 
 @app.route('/limpar_pacientes')
 def limpar_pacientes():

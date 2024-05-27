@@ -11,28 +11,39 @@
 <body>
     <div class="login-container">
         <h2>Login</h2>
-        <form id="login-form" action="{{ url_for('index') }}" method="get">
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flashes">
+                    {% for category, message in messages %}
+                        <div class="flash-message {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <form id="login-form" action="{{ url_for('login') }}" method="post">
             <div class="input-group">
                 <label for="usuario">Usuário:</label>
-                <input type="text" id="usuario" name="usuario" required>
+                <input type="text" id="usuario" name="username" required>
             </div>
             <div class="input-group">
                 <label for="senha">Senha:</label>
-                <input type="password" id="senha" name="senha" required>
+                <input type="password" id="senha" name="password" required>
             </div>
             <button type="submit">Login</button>
-            <p class="pergunta">Não possui conta?</p>
-            <button id="cadastro-btn" type="button">Cadastre-se</button>
         </form>
+
+        <p class="pergunta">Não possui conta?</p>
+        <button id="cadastro-btn" type="button">Cadastre-se</button>
     </div>
 
     <script>
         document.getElementById('cadastro-btn').addEventListener('click', function() {
-            document.getElementById('login-form').action = '{{ url_for("cadastro") }}';
-            document.getElementById('login-form').submit();
+            window.location.href = '{{ url_for("cadastro") }}';
         });
 
-        document.querySelector('form').addEventListener('submit', function(event) {
+        document.getElementById('login-form').addEventListener('submit', function(event) {
             var usernameInput = document.getElementById('usuario');
             var passwordInput = document.getElementById('senha');
             

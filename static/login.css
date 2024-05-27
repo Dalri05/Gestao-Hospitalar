@@ -54,3 +54,27 @@ button:hover {
 .pergunta{
     text-align: center;
 }
+
+.flashes {
+    margin-bottom: 20px;
+}
+
+.flash-message {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.flash-message.error {
+    border-color: red;
+    background-color: #fdd;
+    color: red;
+}
+
+.flash-message.success {
+    border-color: green;
+    background-color: #dfd;
+    color: green;
+}
+
