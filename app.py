@@ -1,6 +1,7 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash,jsonify
 import mysql.connector
 from werkzeug.security import generate_password_hash, check_password_hash
+from backEnd.campos import *
 
 app = Flask(__name__)
 app.secret_key = '12345'
@@ -113,6 +114,11 @@ def ver_consultas():
     cursor.execute('SELECT * FROM consultas')
     consultas = cursor.fetchall()
     return render_template('visconsultas.html', consultas=consultas)
+
+@app.route('/camposNome')
+def camposNome():
+    nomes = queryCampo()
+    return jsonify(nomes)
 
 if __name__ == '__main__':
     app.run(debug=True, port=8000)
