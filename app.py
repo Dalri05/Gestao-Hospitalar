@@ -33,12 +33,14 @@ def cadastro():
         nome = request.form['nome']
         email = request.form['email']
         cpf = request.form['cpf']
-
-        cursor.execute('''
+        try:
+            cursor.execute('''
             INSERT INTO usuarios (usuario, senha, nome, cpf, email)
             VALUES (%s, %s, %s, %s, %s)''', (usuario, senha, nome, cpf, email))
-        conexao.commit()
-        return redirect(url_for('login'))
+            conexao.commit()
+            return redirect(url_for('login'))
+        except:
+            flash('CPF ou usuario ja existente em nossa base de dados')
     
     return render_template('cadastro.html')
 

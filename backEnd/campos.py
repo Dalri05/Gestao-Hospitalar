@@ -1,5 +1,6 @@
 from app import *
 import mysql.connector
+from flask import request
 
 try:
     conexao = mysql.connector.connect(
@@ -19,3 +20,11 @@ def queryCampo():
     logNome = " / ".join(nomes)
     print("usuatios encontrados" + logNome)
     return nomes
+
+def confereCpf():
+    cpf = request.form['cpf']
+    cursor.execute('SELECT cpf FROM usuarios WHERE cpf = %s', (cpf,))
+    cpfConferido = [registro[0] for registro in cursor.fetchall()]
+    logNome = " / ".join(cpfConferido)
+    print("usuatios encontrados" + logNome)
+    return cpfConferido
