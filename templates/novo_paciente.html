@@ -36,12 +36,13 @@
     </div>
     
     <script>
-        function carregarNomes() {
-            var xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function() {
+        document.addEventListener("DOMContentLoaded", function() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "/camposNome", true);
+            xhr.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
                     var nomes = JSON.parse(this.responseText);
-                    var select = document.getElementById("nomes");
+                    var select = document.getElementById("nome");
                     nomes.forEach(function(nome) {
                         var option = document.createElement("option");
                         option.text = nome;
@@ -50,11 +51,8 @@
                     });
                 }
             };
-            xhttp.open("GET", "{{ url_for('camposNome') }}", true);
-            xhttp.send();
-        }
-
-        window.onload = carregarNomes;
+            xhr.send();
+        });
     </script>
 </body>
 </html>

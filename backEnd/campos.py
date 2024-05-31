@@ -13,12 +13,13 @@ try:
 except mysql.connector.Error as err:
     print("Erro de conexão com o banco de dados:", err)
     exit(1)
-
+    
 def queryCampo():
+    # Supondo que o cursor já esteja definido e conectado ao banco de dados
     cursor.execute('SELECT nome FROM usuarios')
     nomes = [registro[0] for registro in cursor.fetchall()]
     logNome = " / ".join(nomes)
-    print("usuatios encontrados" + logNome)
+    print("Usuários encontrados: " + logNome)
     return nomes
 
 def confereCpf():
