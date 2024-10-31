@@ -1,5 +1,7 @@
 package com.hospitalarbackend.hospitalarbackend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -18,12 +20,14 @@ public class PacienteModel {
     @OneToOne
     private ContaModel conta;
 
+    @JsonProperty("CPF")
     private String CPF;
 
     private Date dataNascimento;
 
-    private boolean isSus = false;
+    private boolean isSus;
 
     @OneToMany
+    @JsonIgnore
     private List<ConsultaModel> consultas;
 }
