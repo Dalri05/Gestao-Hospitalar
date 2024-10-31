@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash,json
 import mysql.connector
 from werkzeug.security import generate_password_hash, check_password_hash
 from backEnd.campos import *
+from backEnd.getPacientes import *
 
 app = Flask(__name__)
 app.secret_key = '12345'
@@ -86,6 +87,8 @@ def login():
         else:
             flash('Usuário não encontrado', 'error')
 
+        conexao.close()
+
     return render_template('login.html')
 
 
@@ -121,6 +124,14 @@ def ver_consultas():
 def camposNome():
     nomes = queryCampo()
     return jsonify(nomes)
+
+@app.route('/verPacientes')
+def verPaciente():
+    if request.method == 'GET':
+        return render_template('novo_paciente.html')
+    pacientes = getAllPacientes()
+    return allPacientes
+    
 
 if __name__ == '__main__':
     app.run(debug=True, port=8000)

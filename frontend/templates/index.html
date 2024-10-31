@@ -9,7 +9,7 @@
 </head>   
 
 <body>
-    <div class="container"> 
+    <div class="container container2"> 
         <h1>Lista de Pacientes</h1>
         <ul>
             {% for paciente in pacientes %}
@@ -20,5 +20,6 @@
         <a href="{{ url_for('limpar_pacientes') }}"><button class="clear-btn">Limpar lista de pacientes</button></a>
         <a href="{{ url_for('agendar_consulta') }}"><button class="consultas">Agendar consulta</button></a>
         <a href="{{ url_for('ver_consultas') }}"><button class="vizualizarConsultas">Ver consultas</button></a>
+        <a href="{{ url_for('verPaciente') }}"><button class="vizualizarPacientes">Ver todos Pacientes</button></a>
     </div>
 </body>

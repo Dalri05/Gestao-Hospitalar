@@ -15,7 +15,6 @@ except mysql.connector.Error as err:
     exit(1)
     
 def queryCampo():
-    # Supondo que o cursor já esteja definido e conectado ao banco de dados
     cursor.execute('SELECT nome FROM usuarios')
     nomes = [registro[0] for registro in cursor.fetchall()]
     logNome = " / ".join(nomes)
